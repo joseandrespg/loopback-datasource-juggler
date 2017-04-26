@@ -2079,6 +2079,22 @@ describe('manipulation', function() {
       p1 = new Person({name: 'John', dob: 'X'});
       p1.should.have.property('dob');
       p1.dob.toString().should.be.eql('Invalid Date');
+
+      // isDateString checks
+      var Pet = db.define('Pet', {
+        name: String,
+        gender: String,
+        age: {type: Number, index: true},
+        dob: {type: Date, isDateString: true},
+        createdAt: {type: Date, default: Date},
+      }, {forceId: true, strict: true});
+
+      p1 = new Pet({name: 'Spot', dob: '2015-02-01'});
+      p1.should.have.property('dob', '2015-02-01');
+
+      p1 = new Pet({name: 'Spot', dob: 'X'});
+      p1.should.have.property('dob');
+      p1.dob.should.be.eql('Invalid Date');
     });
   });
 
